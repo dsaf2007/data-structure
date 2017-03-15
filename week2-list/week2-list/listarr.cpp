@@ -22,7 +22,7 @@ List::List(int maxNumber)
 size(0),
 cursor(-1)
 {
-	// pre-lab
+	dataItems = new char[maxSize];
 }
 
 //--------------------------------------------------------------------
@@ -32,7 +32,7 @@ List:: ~List()
 // Frees the memory used by a list.
 
 {
-	// pre-lab
+	delete[] dataItems;
 }
 
 //--------------------------------------------------------------------
@@ -45,10 +45,18 @@ throw (logic_error)
 // list. In either case, moves the cursor to newDataItem.
 
 {
-	// pre-lab
+	if (cursor == 0)
+	{
+		dataItems[0]=newDataItem;
+		cursor = 1;
 
-
-
+	}
+	else
+	{
+		
+		dataItems[cursor] = newDataItem;
+		cursor++;
+	}
 
 
 
@@ -64,11 +72,17 @@ void List::remove() throw (logic_error)
 // first list data items "follows" the last list data item.
 
 {
-	// pre-lab
+	delete dataItems;
+	if(cursor==maxSize)
+	{ 
+		;
+	}
+	else
+	{
+		cursor++;
+	}
 
-
-
-
+	
 
 
 }
@@ -83,8 +97,7 @@ throw (logic_error)
 
 {
 	// Requires that the list is not empty
-	// pre-lab
-
+	dataItems[cursor - 1] = newDataItem;
 
 
 }
@@ -96,7 +109,9 @@ void List::clear()
 // Removes all the data items from a list.
 
 {
-	// pre-lab
+	delete[] dataItems;
+	dataItems = new char[maxSize];
+	
 
 }
 
@@ -108,6 +123,7 @@ bool List::isEmpty() const
 
 {
 	// pre-lab
+	return 0;
 }
 
 //--------------------------------------------------------------------
@@ -118,6 +134,7 @@ bool List::isFull() const
 
 {
 	// pre-lab
+	return 0;
 }
 
 //--------------------------------------------------------------------
@@ -129,12 +146,7 @@ int List::gotoBeginning() throw (logic_error)
 {
 	// pre-lab
 
-
-
-
-
-
-
+	return cursor = 0;
 
 }
 
@@ -152,7 +164,7 @@ int List::gotoEnd() throw (logic_error)
 
 
 
-
+	return 0;
 
 
 }
@@ -166,8 +178,15 @@ bool List::gotoNext() throw (logic_error)
 // returns false.
 
 {
-	// pre-lab
-
+	if (cursor != maxSize)
+	{
+		cursor++;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 
 
 
@@ -183,10 +202,18 @@ bool List::gotoPrior() throw (logic_error)
 // Otherwise, returns false.
 
 {
-	// pre-lab
+	
+	if (cursor != 0)
+	{
+		cursor--;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 
-
-
+	
 
 
 }
@@ -201,7 +228,7 @@ DataType List::getCursor() const throw (logic_error)
 	// pre-lab
 
 
-
+	return dataItems[cursor-1];
 }
 
 //--------------------------------------------------------------------
