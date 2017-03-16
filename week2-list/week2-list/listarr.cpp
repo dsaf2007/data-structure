@@ -140,7 +140,7 @@ bool List::isEmpty() const
 bool List::isFull() const
 
 // Returns 1 if a list is full. Otherwise, returns 0.
-
+//배열에 NULL값이 존재할 경우 0을 반환하게 한다.
 {
 
 	for (int i = 0; i < maxSize; i++)
@@ -161,6 +161,7 @@ bool List::isFull() const
 int List::gotoBeginning() throw (logic_error)
 
 // Moves the cursor to the beginning of the list.
+//cursor의 위치를 처음(0)으로 옮긴다.
 
 {
 	// pre-lab
@@ -176,6 +177,7 @@ int List::gotoBeginning() throw (logic_error)
 int List::gotoEnd() throw (logic_error)
 
 // Moves the cursor to the end of the list.
+//list의 가장 마지막(maxSize-1)로 커서를 옮긴다.
 
 {
 	// pre-lab
@@ -195,6 +197,7 @@ bool List::gotoNext() throw (logic_error)
 // If the cursor is not at the end of a list, then moves the
 // cursor to the next item in the list and returns true. Otherwise,
 // returns false.
+//cursor가 list의 끝에 있지 않은 경우에 cusror+1을 한다. list의 끝에 위치한 경우 flase를 반환한다.
 
 {
 	if (cursor != maxSize-1)
@@ -219,7 +222,7 @@ bool List::gotoPrior() throw (logic_error)
 // If the cursor is not at the beginning of a list, then moves the
 // cursor to the preceeding item in the list and returns true.
 // Otherwise, returns false.
-
+//cursor가 list의 처음에 있지 않은 경우에 cursor-1을한다.list의 처음에 위치한 경우 false를 반환한다.
 {
 	
 	if (cursor != -1)
@@ -242,7 +245,7 @@ bool List::gotoPrior() throw (logic_error)
 DataType List::getCursor() const throw (logic_error)
 
 // Returns the item marked by the cursor.
-
+//cursor가 가리키고있는 data를 출력한다.
 {
 	// pre-lab
 
@@ -257,17 +260,10 @@ void List::showStructure() const
 // Outputs the data items in a list. If the list is empty, outputs
 // "Empty list". This operation is intended for testing/debugging
 // purposes only.
-
+//list에 저장된 data들을 콘솔화면에 나타낸다. 이 때 index number 은 a라는 변수를 따로 선언해서 세고, dataItems배열의 값이 NULL이 아닐 때만 출력하게 한다.
 {
 	
-	/*int size = 0;
-	for (int i = 0; i < maxSize; i++)
-	{
-		if (dataItems[i] != NULL)
-		{
-			size++;
-		}
-	}*/
+	
 	sort(dataItems, dataItems + size);
 	cout << "size of List:" << size << endl;
 	cout << "current location of cursor" << cursor << endl;

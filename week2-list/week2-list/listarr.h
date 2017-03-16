@@ -26,6 +26,7 @@ public:
 	// Destructor
 	~List();
 
+
 	// List manipulation operations
 	void insert(const DataType &newDataItem)    // Insert after cursor
 		throw (logic_error);
