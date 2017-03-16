@@ -22,7 +22,7 @@ List::List(int maxNumber)
 : maxSize(maxNumber),
 size(0),
 cursor(-1)
-//
+//dataItems배열을 maxSize만큼의 크기로 동적할당하고 초기화 해준다.
 {
 	dataItems = new char[maxSize];
 	for (int i = 0; i < maxSize; i++)
@@ -50,23 +50,12 @@ throw (logic_error)
 // newDataItem is inserted as the first (and only) data items in the
 // list. In either case, moves the cursor to newDataItem.
 
+//처음에 cursor가 -1 이므로 cursor+1 즉 cursor의 다음 위치에 data를 입력시키고 cursor의 위치를 하나 옮긴다
 {
-	if (cursor == -1)
-	{
-		dataItems[0]=newDataItem;
-		cursor = 0;
 
-	}
-	else
-	{
-		
 		dataItems[cursor+1] = newDataItem;
 		cursor++;
-	}
-
-
-
-
+		size++;
 
 }
 
@@ -79,22 +68,7 @@ void List::remove() throw (logic_error)
 // first list data items "follows" the last list data item.
 
 {
-	/*for (int i = 0; i < maxSize; i++)
-	{
-		if (dataItems[i] != NULL)
-		{
-			size++;
-		}
-	}
-	dataItems[cursor] = NULL;
-	for (int i=cursor; i <size; i++)
-	{
-		dataItems[i] = dataItems[i + 1];
-	}
-	for (int i = size; i < maxSize; i++)
-	{
-		dataItems[i] = NULL;
-	}*/
+	//cursor의 위치에 있는 data를 NULL을 집어넣어 지우고 cursor을 다음으로 옮긴다
 	dataItems[cursor] = NULL;
 	if(cursor==maxSize-1)
 	{ 
@@ -103,6 +77,7 @@ void List::remove() throw (logic_error)
 	else
 	{
 		cursor++;
+		size--;
 	}
 
 	
@@ -120,8 +95,10 @@ throw (logic_error)
 
 {
 	// Requires that the list is not empty
-	dataItems[cursor] = newDataItem;
-
+	if (isEmpty() != 1)
+	{
+		dataItems[cursor] = newDataItem;
+	}
 
 }
 
@@ -130,7 +107,7 @@ throw (logic_error)
 void List::clear()
 
 // Removes all the data items from a list.
-
+//list에 전부 NULL을 채워넣어 list를 초기화 하고 cursor을 -1의 위치로 옮긴다.
 {
 	for (int i = 0; i < maxSize; i++)
 	{
@@ -144,11 +121,10 @@ void List::clear()
 bool List::isEmpty() const
 
 // Returns 1 if a list is empty. Otherwise, returns 0.
-
+//for문을 이용해 dataItems의 값을 확인하는데 도중에 NULL이 들어간 배열이 있으면 1을 반환하게 하고 없으면 0을 반환한다.
 {
-	for (int i = 0; i < maxSize; i++)
-	{
-		if (dataItems[i] == NULL)
+
+		if (size==0)
 		{
 			return 1;
 		}
@@ -156,7 +132,7 @@ bool List::isEmpty() const
 		{
 			return 0;
 		}
-	}
+	
 }
 
 //--------------------------------------------------------------------
@@ -284,14 +260,14 @@ void List::showStructure() const
 
 {
 	
-	int size = 0;
+	/*int size = 0;
 	for (int i = 0; i < maxSize; i++)
 	{
 		if (dataItems[i] != NULL)
 		{
 			size++;
 		}
-	}
+	}*/
 	sort(dataItems, dataItems + size);
 	cout << "size of List:" << size << endl;
 	cout << "current location of cursor" << cursor << endl;
