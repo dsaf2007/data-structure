@@ -121,10 +121,10 @@ void List::clear()
 bool List::isEmpty() const
 
 // Returns 1 if a list is empty. Otherwise, returns 0.
-//for문을 이용해 dataItems의 값을 확인하는데 도중에 NULL이 들어간 배열이 있으면 1을 반환하게 하고 없으면 0을 반환한다.
+//배열 전체가 비어있을 경우 1을 반환하는 것이므로 dataItems의 첫번째 항이 NULL일 경우 1을 반환한다.
 {
 
-		if (size==0)
+		if (dataItems[0]==NULL)
 		{
 			return 1;
 		}
