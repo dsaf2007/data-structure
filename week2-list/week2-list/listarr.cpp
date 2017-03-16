@@ -8,6 +8,7 @@
 
 
 #include "listarr.h"
+#include "algorithm"
 
 using namespace std;
 
@@ -21,8 +22,13 @@ List::List(int maxNumber)
 : maxSize(maxNumber),
 size(0),
 cursor(-1)
+//
 {
 	dataItems = new char[maxSize];
+	for (int i = 0; i < maxSize; i++)
+	{
+		dataItems[i] = NULL;
+	}
 }
 
 //--------------------------------------------------------------------
@@ -45,18 +51,19 @@ throw (logic_error)
 // list. In either case, moves the cursor to newDataItem.
 
 {
-	if (cursor == 0)
+	if (cursor == -1)
 	{
 		dataItems[0]=newDataItem;
-		cursor = 1;
+		cursor = 0;
 
 	}
 	else
 	{
 		
-		dataItems[cursor] = newDataItem;
+		dataItems[cursor+1] = newDataItem;
 		cursor++;
 	}
+
 
 
 
@@ -72,10 +79,26 @@ void List::remove() throw (logic_error)
 // first list data items "follows" the last list data item.
 
 {
-	delete dataItems;
-	if(cursor==maxSize)
+	/*for (int i = 0; i < maxSize; i++)
+	{
+		if (dataItems[i] != NULL)
+		{
+			size++;
+		}
+	}
+	dataItems[cursor] = NULL;
+	for (int i=cursor; i <size; i++)
+	{
+		dataItems[i] = dataItems[i + 1];
+	}
+	for (int i = size; i < maxSize; i++)
+	{
+		dataItems[i] = NULL;
+	}*/
+	dataItems[cursor] = NULL;
+	if(cursor==maxSize-1)
 	{ 
-		;
+		cursor = 0;
 	}
 	else
 	{
@@ -97,7 +120,7 @@ throw (logic_error)
 
 {
 	// Requires that the list is not empty
-	dataItems[cursor - 1] = newDataItem;
+	dataItems[cursor] = newDataItem;
 
 
 }
@@ -109,10 +132,11 @@ void List::clear()
 // Removes all the data items from a list.
 
 {
-	delete[] dataItems;
-	dataItems = new char[maxSize];
-	
-
+	for (int i = 0; i < maxSize; i++)
+	{
+		dataItems[i] = NULL;
+	}
+	cursor = -1;
 }
 
 //--------------------------------------------------------------------
@@ -122,8 +146,17 @@ bool List::isEmpty() const
 // Returns 1 if a list is empty. Otherwise, returns 0.
 
 {
-	// pre-lab
-	return 0;
+	for (int i = 0; i < maxSize; i++)
+	{
+		if (dataItems[i] == NULL)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
 }
 
 //--------------------------------------------------------------------
@@ -133,8 +166,18 @@ bool List::isFull() const
 // Returns 1 if a list is full. Otherwise, returns 0.
 
 {
-	// pre-lab
-	return 0;
+
+	for (int i = 0; i < maxSize; i++)
+	{
+		if (dataItems[maxSize-1] == NULL)
+		{
+			return 0;
+		}
+		else
+		{
+			return 1;
+		}
+	}
 }
 
 //--------------------------------------------------------------------
@@ -164,7 +207,7 @@ int List::gotoEnd() throw (logic_error)
 
 
 
-	return 0;
+	return cursor = maxSize-1;
 
 
 }
@@ -178,7 +221,7 @@ bool List::gotoNext() throw (logic_error)
 // returns false.
 
 {
-	if (cursor != maxSize)
+	if (cursor != maxSize-1)
 	{
 		cursor++;
 		return true;
@@ -203,7 +246,7 @@ bool List::gotoPrior() throw (logic_error)
 
 {
 	
-	if (cursor != 0)
+	if (cursor != -1)
 	{
 		cursor--;
 		return true;
@@ -228,7 +271,7 @@ DataType List::getCursor() const throw (logic_error)
 	// pre-lab
 
 
-	return dataItems[cursor-1];
+	return dataItems[cursor];
 }
 
 //--------------------------------------------------------------------
@@ -240,12 +283,27 @@ void List::showStructure() const
 // purposes only.
 
 {
-	// pre-lab
-
-
-
-
-
-
+	
+	int size = 0;
+	for (int i = 0; i < maxSize; i++)
+	{
+		if (dataItems[i] != NULL)
+		{
+			size++;
+		}
+	}
+	sort(dataItems, dataItems + size);
+	cout << "size of List:" << size << endl;
+	cout << "current location of cursor" << cursor << endl;
+	cout << "---Outputs All data items in a list---" << endl;
+	int a = 0;
+	for (int i = 0; i < maxSize; i++)
+	{
+		
+		if (dataItems[i] != NULL)
+		{
+			cout << a << "-data:" << dataItems[i] << endl; a++;
+		}
+	}
 }
  
