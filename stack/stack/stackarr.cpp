@@ -46,6 +46,7 @@ template < class SE >
 void Stack<SE>::push(const SE &newElement)
 // Inserts newElement onto the top of a stack.
 //처음 top의 위치가 -1이므로 top+1의 자리에 newElement를 넣고 top+1을 해준다.
+//stack이 가득차지 않았을 경우에만
 {
 	if (full() != 1)
 	{
@@ -60,6 +61,7 @@ void Stack<SE>::push(const SE &newElement)
 template < class SE >
 SE Stack<SE>::pop()
 // Removes the topmost element from a stack and returns it.
+//stack이 비어있지 않으면 top위치의 값을 return하고 아니면 NULL return
 {
 	//element[top] = NULL;
 	if (empty() != 1)
@@ -76,6 +78,7 @@ SE Stack<SE>::pop()
 template < class SE >
 void Stack<SE>::clear()
 // Removes all the elements from a stack.
+//top을-1로 옮겨 실제로 값을 지우지는 않지만 모두 clear된 것 처럼 출력한다.
 {
 	//for (int i = 0; i < maxSize; i++)
 	//{
@@ -90,6 +93,7 @@ void Stack<SE>::clear()
 template < class SE >
 int Stack<SE>::empty() const
 // Returns 1 if a stack is empty. Otherwise, returns 0.
+//stack이 비어있으면 1을 return하고 아니면 0return;
 {
 	if (top == -1)return 1;
 	else return 0;
@@ -100,6 +104,7 @@ int Stack<SE>::empty() const
 template < class SE >
 int Stack<SE>::full() const
 // Returns 1 if a stack is full. Otherwise, returns 0.
+//stack이 가득 차 있을 경우 1을 return하고 아닌경우 0return
 {
 	if (top == maxSize - 1) return 1;
 	else return 0;
@@ -119,11 +124,11 @@ void Stack<SE>::showStructure() const
 	std::cout << "Show all datas in the stack" << std::endl;
 
 
-	if (empty() == 1)
+	if (empty() == 1)//stack이 비어있는 경우 Empty stack을 출력
 	{
 		std::cout << "Empty stack" << std::endl;
 	}
-	else
+	else // 아닌경우에 stack의 값을 차례대로 출력.
 	{
 		for (int i = 0; i < top + 1; i++)
 		{
