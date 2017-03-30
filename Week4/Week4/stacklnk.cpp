@@ -48,7 +48,11 @@ template < class SE >
 void Stack<SE>::push(const SE &newElement)
 // Inserts newElement onto the top of a stack.
 {
-	
+	StackNode<SE>* location;
+	location = new StackNode<SE>(newElement, top);
+	location->element = newElement;
+	location->next = top;
+	top = location;
 
 }
 
@@ -58,9 +62,14 @@ template < class SE >
 SE Stack<SE>::pop()
 // Removes the topmost element from a stack and returns it.
 {
-	
+	SE item;
+	StackNode<SE>* tempPtr;
 
-
+	item = top->element;
+	tempPtr = top;
+	top = top->next;
+	delete tempPtr;
+	return item;
 
 }
 
@@ -71,7 +80,14 @@ void Stack<SE>::clear()
 // Removes all the elements from a stack.
 {
 	
+	StackNode<SE>* tempPtr;
 
+	while (top != NULL)
+	{
+		tempPtr = top;
+		top = top->next;
+		delete tempPtr;
+	}
 
 
 
@@ -83,7 +99,7 @@ template < class SE >
 int Stack<SE>::empty() const
 // Returns 1 if a stack is empty. Otherwise, returns 0.
 {
-	
+	return (top == NULL);
 }
 
 //--------------------------------------------------------------------
@@ -94,7 +110,7 @@ int Stack<SE>::full() const
 // done cleanly in generic C++ because there is sometimes overhead
 // associated with a memory allocation.
 {
-
+	return 1;
 }
 
 //--------------------------------------------------------------------
@@ -105,9 +121,16 @@ void Stack<SE>::showStructure() const
 // the stack is empty, outputs "Empty stack". This operation is
 // intended for testing and debugging purposes only.
 {
-	
+	StackNode<SE> *SJ;
 
+	if (top == 0)
+		std::cout << "Empty Stack";
+	else
+	{
 
+		for(SJ = top; SJ != 0; SJ = SJ->next)
+		std::cout << SJ->element << ":";
+	}
 
 
 }
