@@ -48,7 +48,9 @@ template < class SE >
 void Stack<SE>::push(const SE &newElement)
 // Inserts newElement onto the top of a stack.
 {
-	if (top != 0)
+	StackNode<SE> *SJ;
+	SJ = top;
+	if (full()==0)//Inserts newElement when the stack is not full
 	{
 		StackNode<SE>* location;
 		location = new StackNode<SE>(newElement, top);
@@ -56,7 +58,8 @@ void Stack<SE>::push(const SE &newElement)
 		location->next = top;
 		top = location;
 	}
-	else return;//std::cout << "stack is Full" << std::endl;
+	else std::cout << "stack is full" << std::endl;//print stack is full when the stack is full.
+	
 }
 
 //--------------------------------------------------------------------
@@ -67,7 +70,7 @@ SE Stack<SE>::pop()
 {
 	SE item;
 	StackNode<SE>* tempPtr;
-	if (top != 0)
+	if (top != 0)//top이 0일경우, 즉 stack이 비어있지 않을 경우에 pop을 한다. empty()를 이용하여도 된다.
 	{
 		item = top->element;
 		tempPtr = top;
@@ -76,7 +79,11 @@ SE Stack<SE>::pop()
 		return item;
 	
 	}
-	else return NULL;
+	else//stack이 비어있을 경우 stack이 비어 pop이 불가능하다고 알림.
+	{
+		std::cout << "cannot pop becasue stack is empty" << std::endl;
+		return NULL;
+	}
 
 	
 
@@ -91,14 +98,12 @@ void Stack<SE>::clear()
 	
 	StackNode<SE>* tempPtr;
 
-	while (top != NULL)
+	while (top != NULL)//top이 NULL이 아닐경우에 tempPtr에 top을 입력하고 top을 next로 옮긴다음에 tempPtr을 삭제하여 순차적으로 stack의 값을 모두 삭제
 	{
 		tempPtr = top;
 		top = top->next;
 		delete tempPtr;
 	}
-
-
 
 }
 
@@ -107,6 +112,7 @@ void Stack<SE>::clear()
 template < class SE >
 int Stack<SE>::empty() const
 // Returns 1 if a stack is empty. Otherwise, returns 0.
+//stack이 비어있을 경우 1return 아닐경우 0return
 {
 	return (top == NULL);
 }
@@ -122,8 +128,8 @@ int Stack<SE>::full() const
 
 	StackNode<SE> *SJ;
 	SJ = top;
-	if (SJ == 0) return 0;
-	else if(SJ->element==NULL)return 1;
+	if (SJ == 0) return 0;//top 이 0인경우는 stack이 비어있을 경우도 있으므로 첫 조건으로 달아놓고 0을 return한다.
+	else if(SJ->element==NULL)return 1;//stack이 꽉 차고 입력을 하면 새로운top은 할당이 되지만 그 안에 값을 입력할 수 없기때문에 element가 NULL일 경우에 꽉 찬 것으로 간주한다.
 	else return 0;
 }
 
@@ -136,11 +142,16 @@ void Stack<SE>::showStructure() const
 // intended for testing and debugging purposes only.
 {
 	StackNode<SE> *SJ;
-	SJ = top;
+
 	
-	
-	{	for(SJ = top; SJ != 0; SJ = SJ->next)
-		std::cout << SJ->element << ":";
+
+	if (top == 0)
+		std::cout << "Empty Stack" << std::endl;
+	else
+	{
+
+		for (SJ = top; SJ != 0; SJ = SJ->next)
+			std::cout << SJ->element << ":";
 	}
 
 
