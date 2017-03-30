@@ -39,7 +39,7 @@ template < class SE >
 Stack<SE>:: ~Stack()
 // Frees the memory used by a stack.
 {
-	
+	clear();
 }
 
 //--------------------------------------------------------------------
@@ -48,12 +48,15 @@ template < class SE >
 void Stack<SE>::push(const SE &newElement)
 // Inserts newElement onto the top of a stack.
 {
-	StackNode<SE>* location;
-	location = new StackNode<SE>(newElement, top);
-	location->element = newElement;
-	location->next = top;
-	top = location;
-
+	if (top != 0)
+	{
+		StackNode<SE>* location;
+		location = new StackNode<SE>(newElement, top);
+		location->element = newElement;
+		location->next = top;
+		top = location;
+	}
+	else return;//std::cout << "stack is Full" << std::endl;
 }
 
 //--------------------------------------------------------------------
@@ -64,12 +67,18 @@ SE Stack<SE>::pop()
 {
 	SE item;
 	StackNode<SE>* tempPtr;
+	if (top != 0)
+	{
+		item = top->element;
+		tempPtr = top;
+		top = top->next;
+		delete tempPtr;
+		return item;
+	
+	}
+	else return NULL;
 
-	item = top->element;
-	tempPtr = top;
-	top = top->next;
-	delete tempPtr;
-	return item;
+	
 
 }
 
@@ -110,7 +119,12 @@ int Stack<SE>::full() const
 // done cleanly in generic C++ because there is sometimes overhead
 // associated with a memory allocation.
 {
-	return 1;
+
+	StackNode<SE> *SJ;
+	SJ = top;
+	if (SJ == 0) return 0;
+	else if(SJ->element==NULL)return 1;
+	else return 0;
 }
 
 //--------------------------------------------------------------------
@@ -122,13 +136,10 @@ void Stack<SE>::showStructure() const
 // intended for testing and debugging purposes only.
 {
 	StackNode<SE> *SJ;
-
-	if (top == 0)
-		std::cout << "Empty Stack";
-	else
-	{
-
-		for(SJ = top; SJ != 0; SJ = SJ->next)
+	SJ = top;
+	
+	
+	{	for(SJ = top; SJ != 0; SJ = SJ->next)
 		std::cout << SJ->element << ":";
 	}
 
