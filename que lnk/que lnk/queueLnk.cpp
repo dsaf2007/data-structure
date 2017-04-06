@@ -143,6 +143,7 @@ void Queue<QE>::showStructure() const
 {
 	QueueNode<QE> *HH;
 	HH = front;
+
 	if (empty() == 1)
 		cout << "Empty queue" << endl;
 	else
