@@ -21,7 +21,7 @@ Queue<QE>::Queue(int maxNumber)
 front(-1),
 rear(-1)
 {
-	// pre-lab (Array)
+	element = new QE[maxSize];
 }
 
 //--------------------------------------------------------------------
@@ -32,7 +32,7 @@ Queue<QE>:: ~Queue()
 // Frees the memory used by a queue.
 
 {
-	// pre-lab (Array)
+	delete[] element;
 }
 
 //--------------------------------------------------------------------
@@ -43,8 +43,18 @@ void Queue<QE>::enqueue(const QE &newElement)
 // Inserts newElement at the rear of a queue.
 
 {
-	// pre-lab (Array)
-
+	
+	if (full() !=1 )
+	{
+		
+		element[(rear+1)%maxSize] = newElement;
+		rear++;
+		
+	}
+	else
+	{
+		std::cout << "queue is full" << std::endl;
+	}
 
 
 }
@@ -58,7 +68,21 @@ QE Queue<QE>::dequeue()
 // returns it.
 
 {
-	// pre-lab (Array)
+
+	QE temp;
+	if (empty() != 1)
+	{
+		
+		temp= element[(front+1)%maxSize];
+		element[(front + 1) % maxSize] = NULL;
+		front++;
+		return temp;
+	}
+	else
+	{
+		std::cout << "queue is empty" << std::endl;
+		return NULL;
+	}
 
 
 
@@ -72,7 +96,8 @@ void Queue<QE>::clear()
 // Removes all the elements from a queue.
 
 {
-	// pre-lab (Array)
+	front = -1;
+	rear = -1;
 
 }
 
@@ -84,7 +109,11 @@ int Queue<QE>::empty() const
 // Returns 1 if a queue is empty. Otherwise, returns 0.
 
 {
-	// pre-lab (Array)
+	if (front == -1 && rear == -1)
+	{
+		return 1;
+	}
+	else return 0;
 }
 
 //--------------------------------------------------------------------
@@ -95,7 +124,7 @@ int Queue<QE>::full() const
 // Returns 1 if a queue is full. Otherwise, returns 0.
 
 {
-	return ((rear + 1) % maxSize == front);
+	return ((rear + 2) % maxSize == (front+1)%maxSize);
 }
 
 //--------------------------------------------------------------------
@@ -110,18 +139,21 @@ void Queue<QE>::showStructure() const
 {
 	int j;   // Loop counter
 
-	if (front == -1)
+	if (empty()==1)
 		cout << "Empty queue" << endl;
 	else
 	{
-		cout << "front = " << front << "  rear = " << rear << endl;
+		cout << "front = " << front << "  rear = " << rear%maxSize << endl;
 		for (j = 0; j < maxSize; j++)
 			cout << j << "\t";
 		cout << endl;
 
-		// pre-lab (Array)
-
-
+		for (j = 0; j < maxSize;j++)
+		{
+			cout << element[j] << "\t";
+			
+		}
+		cout << endl;
 
 	}
 }
