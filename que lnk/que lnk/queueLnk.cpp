@@ -39,7 +39,7 @@ template < class QE >
 Queue<QE>:: ~Queue()
 
 // Frees the memory used by a queue.
-
+//clear()을 이용해  queue에 이용된 메모리를free한다.
 {
 	clear();
 }
@@ -50,7 +50,7 @@ template < class QE >
 void Queue<QE>::enqueue(const QE &newElement)
 
 // Inserts newElement at the rear of a queue.
-
+//queue의 rear에 새로운 값을 insert한다. linked queue이므로 full인지 확인하지 않는다.
 {
 	
 
@@ -79,6 +79,7 @@ QE Queue<QE>::dequeue()
 
 // Removes the least recently (front) element from a queue and
 // returns it.
+//frunt에 있는 값을 삭제하고 그것을 return한다.
 
 {
 	QueueNode<QE>*temp;
@@ -104,7 +105,7 @@ template < class QE >
 void Queue<QE>::clear()
 
 // Removes all the elements from a queue.
-
+//queue에 모든 원소를 삭제.
 {
 	QueueNode<QE>* temp;
 
@@ -125,7 +126,7 @@ template < class QE >
 int Queue<QE>::empty() const
 
 // Returns 1 if a queue is empty. Otherwise, returns 0.
-
+//queue가 비어있으면 1return
 {
 	return(front == NULL);
 
