@@ -1,11 +1,3 @@
-//--------------------------------------------------------------------
-//
-//  Laboratory 8                                         listdbl.cpp
-//
-//  SOLUTION: Circular, doubly linked list implementation of the
-//            List ADT
-//
-//--------------------------------------------------------------------
 
 #include <assert.h>
 #include "ListDbl.h"
@@ -16,8 +8,8 @@ template < class LE >
 ListNode<LE>::ListNode(const LE &elem, ListNode<LE> *priorPtr,
 	ListNode<LE> *nextPtr)
 
-	// Creates a list node containing element elem, next pointer nextPtr,
-	// and prior pointer priorPtr.
+	// element,prior,next 의 포인터를 각각 생성한다.
+
 
 	: element(elem),
 	prior(priorPtr),
@@ -29,7 +21,7 @@ ListNode<LE>::ListNode(const LE &elem, ListNode<LE> *priorPtr,
 template < class LE >
 List<LE>::List(int ignored = 0)
 
-// Creates an empty list.
+// 빈 리스트 생성
 
 	: head(0),
 	cursor(0)
@@ -40,7 +32,6 @@ List<LE>::List(int ignored = 0)
 template < class LE >
 List<LE>:: ~List()
 
-// Frees the memory used by a list.
 
 {
 	clear();
@@ -51,25 +42,29 @@ List<LE>:: ~List()
 template < class LE >
 void List<LE>::insert(const LE &newElement)
 
-// Inserts newElement after the cursor. If the list is empty, then
-// newElement is inserted as the first (and only) element in the list.
-// In either case, moves the cursor to newElement.
-
+// 커서 다음위치에 newElement를 넣는다. 빈 리스트의 경우 리스트의 첫부분에 넣는다. 양쪽 경우 모두
+//내용 삽입 후에 newElement로 커서를 옮긴다.
 {
 	ListNode<LE> *p;    // Pointer to inserted node
-
-	if (head == 0)             // Empty list
+	p = new ListNode<LE>(newElement, 0, 0);
+	if (empty())             // Empty list
 	{
-		p = new ListNode<LE>(newElement, 0, 0);
-		assert(p != 0);
+		
+		
 		p->next = p;
 		p->prior = p;
 		head = p;
 	}
+	else if (cursor->next == 0)
+	{
+		cursor->next = p;
+		p->prior = cursor;
+	}
 	else                         // After cursor
 	{
-		p = new ListNode<LE>(newElement, cursor, cursor->next);
-		assert(p != 0);
+		//p = new ListNode<LE>(newElement, cursor, cursor->next);
+		p->prior = cursor;
+		p->next = cursor->next;
 		cursor->next->prior = p;
 		cursor->next = p;
 	}
@@ -81,9 +76,7 @@ void List<LE>::insert(const LE &newElement)
 template < class LE >
 void List<LE>::remove()
 
-// Removes the element marked by the cursor from a list. Moves the
-// cursor to the next element in the list. Assumes that the first list
-// element "follows" the last list element.
+//cursor에 있는 element를 삭제하고 cursor을 하나 이전으로 옮긴다.
 
 {
 	ListNode<LE> *p;   // Pointer to removed node
@@ -96,6 +89,7 @@ void List<LE>::remove()
 			head = 0;
 			cursor = 0;
 		}
+	
 		else
 		{
 			cursor->prior->next = cursor->next;
@@ -114,11 +108,10 @@ void List<LE>::remove()
 template < class LE >
 void List<LE>::replace(const LE &newElement)
 
-// Replaces the element marked by the cursor with newElement and
-// leaves the cursor at newElement.
+//cursor위치의 자료를 newElement로 바꾼다.
 
 {
-	assert(head != 0);      //  Requires that the list is not empty
+	if(empty()!=1)      //  Requires that the list is not empty
 	cursor->element = newElement;
 }
 
@@ -127,7 +120,7 @@ void List<LE>::replace(const LE &newElement)
 template < class LE >
 void List<LE>::clear()
 
-// Removes all the elements from a list.
+// 자료를 모두 삭제
 
 {
 	ListNode<LE> *p,       // Points to successive nodes
@@ -153,46 +146,24 @@ void List<LE>::clear()
 template < class LE >
 void List<LE>::reverse()
 
-// Removes all the elements from a list.
-
+//구현 못함
 {
 	ListNode<LE> *p,       // Points to successive nodes
 		*tempP;  
 
-	if (head != 0)
-	{
+	
 		p = head; tempP=NULL;
 		
-		do
+		while (p != NULL)
 		{
 			tempP = p->prior;
-			p->prior= p->next;
-			p->next= tempP;
+			p->prior = p->next;
+			p->next = tempP;
 			p = p->prior;
-		} while (p != head);
+		}
+		 
 		if(tempP !=NULL)
 			head=tempP->prior;
-
-		/*do
-		{
-			tempP = new ListNode<LE>(p->element, cursor, cursor->next);
-			tempP=tempP->next;
-			p = p->prior;
-		} while (p != head);
-		
-		do
-		{
-			p->element = tempP->element;
-			tempP = tempP->prior;
-			p = p-> next;
-		} while (tempP != head);
-
-		head = 0;*/
-		cursor = p;
-	}
-	
-	delete tempP;
-	delete p;
 
 
 }
@@ -200,7 +171,7 @@ void List<LE>::reverse()
 template < class LE >
 int List<LE>::empty() const
 
-// Returns 1 if a list is empty. Otherwise, returns 0.
+// 빈 리스트인 경우 1return
 
 {
 	return (head == 0);
@@ -211,10 +182,6 @@ int List<LE>::empty() const
 template < class LE >
 int List<LE>::full() const
 
-// Returns 1 if a list is full. Otherwise, returns 0. Cannot be
-// done cleanly in generic C++ because there is sometimes overhead
-// associated with a memory allocation.
-
 {
 	return 0;
 }
@@ -224,8 +191,7 @@ int List<LE>::full() const
 template < class LE >
 int List<LE>::gotoBeginning()
 
-// If a list is not empty, then moves the cursor to the beginning of
-// the list and returns 1. Otherwise, returns 0.
+// 빈 리스트가 아닌 경우 cursor을 맨 처음으로 옮긴다
 
 {
 	int result;   // Result returned
@@ -246,8 +212,7 @@ int List<LE>::gotoBeginning()
 template < class LE >
 int List<LE>::gotoEnd()
 
-// If a list is not empty, then moves the cursor to the end of the
-// list and returns 1. Otherwise, returns 0.
+// 빈 리스트가 아닌 경우 cursor을 마지막으로 옮긴다
 
 {
 	int result;   // Result returned
@@ -268,10 +233,7 @@ int List<LE>::gotoEnd()
 template < class LE >
 int List<LE>::gotoNext()
 
-// If the cursor is not at the end of a list, then moves the
-// cursor to the next element in the list and returns 1. Otherwise,
-// returns 0.
-
+//cursor가 리스트의 마지막에 있는 것이 아닌경우 다음 위치로 cursor을 옮긴다.
 {
 	int result;   // Result returned
 
@@ -291,9 +253,7 @@ int List<LE>::gotoNext()
 template < class LE >
 int List<LE>::gotoPrior()
 
-// If the cursor is not at the beginning of a list, then moves the
-// cursor to the preceeding element in the list and returns 1.
-// Otherwise, returns 0.
+//cursor가 리스트의 처음에 있는 것이 아닌경우 이전 위치로 cursor을 옮긴다.
 
 {
 	ListNode<LE> *p;   // Pointer to prior node
@@ -315,7 +275,7 @@ int List<LE>::gotoPrior()
 template < class LE >
 LE List<LE>::getCursor() const
 
-// Returns the element marked by the cursor.
+// cursor가 가리키는 자료를 출력한다.
 
 {
 	assert(head != 0);      //  Requires that the list is not empty
@@ -325,7 +285,7 @@ LE List<LE>::getCursor() const
 template < class LE >
 int List<LE>::getPos()
 
-// Returns the element marked by the cursor.
+//cursor의 위치를 출력한다
 
 {
 	ListNode<LE> *p;
@@ -334,7 +294,7 @@ int List<LE>::getPos()
 	int position = 0;
 	if (empty() != 1)
 	{
-		do
+		do//list의 처음부터 cursor의 위치까지 반복문을 돌려 ++해주면서 cursor의 위치를 구함
 		{
 			if (p == cursor)
 				return ++position;
@@ -348,14 +308,14 @@ int List<LE>::getPos()
 template < class LE >
 int List<LE>::length()
 
-// Returns the element marked by the cursor.
+// 리스트의 길이를 출력한다./
 
 {
 	ListNode<LE> *p;
 	p = head;
 
 	int position = 0;
-	if (empty() != 1)
+	if (empty() != 1)//list의 처음부터 끝까지 반복을 하면서 ++하여 총 길이 구함
 	{
 		do
 		{
@@ -363,6 +323,7 @@ int List<LE>::length()
 			p = p->next;
 		} while (p != head);
 		
+
 	}
 	return position;
 }

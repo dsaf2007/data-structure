@@ -3,22 +3,11 @@
 #include "listrec.h"
 #include "stacklnk.cpp"
 
-//--------------------------------------------------------------------
-//
-// Insert your singly linked list implementations (from Laboratory 7)
-// of the following functions:
-//
-//   - The ListNode class constructor
-//
-//   - The List class constructor, destructor, insert(), clear(), and
-//     showstructure() functions.
-//
-//--------------------------------------------------------------------
+
 template < class LE >
 ListNode<LE>::ListNode(const LE &elem, ListNode<LE> *nextPtr)
 
-// Creates a list node containing element elem and next pointer
-// nextPtr.
+//constructor
 
 	: element(elem),
 	next(nextPtr)
@@ -29,8 +18,7 @@ ListNode<LE>::ListNode(const LE &elem, ListNode<LE> *nextPtr)
 template < class LE >
 List<LE>::List(int ignored)
 
-// Creates an empty list. The argument is included for compatibility
-// with the array implementation and is ignored.
+
 
 	: head(0),
 	cursor(0)
@@ -41,7 +29,7 @@ List<LE>::List(int ignored)
 template < class LE >
 List<LE>:: ~List()
 
-// Frees the memory used by a list.
+//destructor
 
 {
 	clear();
@@ -52,18 +40,16 @@ List<LE>:: ~List()
 template < class LE >
 void List<LE>::insert(const LE &newElement)
 
-// Inserts newElement after the cursor. If the list is empty, then
-// newElement is inserted as the first (and only) element in the list.
-// In either case, moves the cursor to newElement.
+// cusor 다음위치에 newElement 삽입
 
 {
-	if (head == 0)             // Empty list
+	if (head == 0)             // list가 비었을 경우
 	{
 		head = new ListNode<LE>(newElement, 0);
 		assert(head != 0);
 		cursor = head;
 	}
-	else                         // After cursor
+	else                         // 아닌경우
 	{
 		cursor->next = new ListNode<LE>(newElement, cursor->next);
 		assert(cursor->next != 0);
@@ -76,11 +62,11 @@ void List<LE>::insert(const LE &newElement)
 template < class LE >
 void List<LE>::clear()
 
-// Removes all the elements from a list.
+// list의 모든 자료 제거
 
 {
-	ListNode<LE> *p,      // Points to successive nodes
-		*nextP;  // Points to next node
+	ListNode<LE> *p,     
+		*nextP;  
 	p = head;
 	while (p != 0)
 	{
@@ -98,12 +84,9 @@ void List<LE>::clear()
 template < class LE >
 void List<LE>::showStructure() const
 
-// Outputs the elements in a list. If the list is empty, outputs
-// "Empty list". This operation is intended for testing and
-// debugging purposes only.
-
+//list가 비었을 경우 "Empty list" 아닐경우 structure을 보여준다
 {
-	ListNode<LE> *p;   // Iterates through the list
+	ListNode<LE> *p;   
 
 	if (head == 0)
 		cout << "Empty list" << endl;
@@ -120,19 +103,11 @@ void List<LE>::showStructure() const
 
 
 
-//--------------------------------------------------------------------
-//
-// Recursively implemented linked list functions used in the Prelab
-// Exercise
-//
-//--------------------------------------------------------------------
 
 template < class LE >
 void List<LE>::write() const
 
-// Outputs the elements in a list from beginning to end. Assumes that
-// objects of type LE can be output to the cout stream.
-
+// list의 element를 출력한다
 {
 	cout << "List : ";
 	writeSub(head);
@@ -144,14 +119,13 @@ void List<LE>::write() const
 template < class LE >
 void List<LE>::writeSub(ListNode<LE> *p) const
 
-// Recursive partner of the write() function. Processes the sublist
-// that begins with the node pointed to by p.
+// write함수의 재귀호출을 위한 함수.(c++의 특성 때문에 따로 함수를 둔다)
 
 {
 	if (p != 0)
 	{
-		cout << p->element;   // Output element
-		writeSub(p->next);    // Continue with next node
+		cout << p->element;   //element 출력
+		writeSub(p->next);  
 	}
 }
 
@@ -160,8 +134,7 @@ void List<LE>::writeSub(ListNode<LE> *p) const
 template < class LE >
 void List<LE>::insertEnd(const LE &newElement)
 
-// Inserts newElement at the end of a list. Moves the cursor to
-// newElement.
+// list의 끝에 newElement를 삽입
 
 {
 	insertEndSub(head, newElement);
@@ -173,8 +146,7 @@ template < class LE >
 void List<LE>::insertEndSub(ListNode<LE> *&p,
 	const LE &newElement)
 
-	// Recursive partner of the insertEnd() function. Processes the
-	// sublist that begins with the node pointed to by p.
+	// insertEnd의 재귀를 위한 함수. node가 p에서 시작
 
 {
 	if (p != 0)
@@ -190,9 +162,7 @@ void List<LE>::insertEndSub(ListNode<LE> *&p,
 template < class LE >
 void List<LE>::writeMirror() const
 
-// Outputs the elements in a list from beginning to end and back
-// again. Assumes that objects of type LE can be output to the cout
-// stream.
+// list에 거울을 댄 것 같이 출력되게 한다.
 
 {
 	cout << "Mirror : ";
@@ -205,15 +175,13 @@ void List<LE>::writeMirror() const
 template < class LE >
 void List<LE>::writeMirrorSub(ListNode<LE> *p) const
 
-// Recursive partner of the writeMirror() function. Processes the
-// sublist that begins with the node pointed to by p.
 
 {
 	if (p != 0)
 	{
-		cout << p->element;        // Output element (forward)
-		writeMirrorSub(p->next);   // Continue with next node
-		cout << p->element;        // Output element (backward)
+		cout << p->element;        // 전행
+		writeMirrorSub(p->next);   // 다음노드로 넘어간다
+		cout << p->element;        // 후행
 	}
 }
 
@@ -222,7 +190,7 @@ void List<LE>::writeMirrorSub(ListNode<LE> *p) const
 template < class LE >
 void List<LE>::reverse()
 
-// Reverses the order of the elements in a list.
+//list를 뒤집는다
 
 {
 	reverseSub(0, head);
@@ -233,17 +201,14 @@ void List<LE>::reverse()
 template < class LE >
 void List<LE>::reverseSub(ListNode<LE> *p, ListNode<LE> *nextP)
 
-// Recursive partner of the reverse() function. Processes the sublist
-// that begins with the node pointed to by nextP.
-
 {
 	if (nextP != 0)
 	{
-		reverseSub(nextP, nextP->next);   // Continue with next node
+		reverseSub(nextP, nextP->next); 
 		nextP->next = p;                 // Reverse link
 	}
 	else
-		head = p;                        // Move head to end of list
+		head = p;                        // list의 head로 이동
 }
 
 //--------------------------------------------------------------------
@@ -251,8 +216,7 @@ void List<LE>::reverseSub(ListNode<LE> *p, ListNode<LE> *nextP)
 template < class LE >
 void List<LE>::deleteEnd()
 
-// Deletes the element at the end of a list. Moves the cursor to the
-// beginning of the list.
+//list의 가장 마지막 element를 지운다
 
 {
 	deleteEndSub(head);
@@ -264,16 +228,14 @@ void List<LE>::deleteEnd()
 template < class LE >
 void List<LE>::deleteEndSub(ListNode<LE> *&p)
 
-// Recursive partner of the deleteEnd() function. Processes the
-// sublist that begins with the node pointed to by p.
 
 {
 	if (p->next != 0)
-		deleteEndSub(p->next);   // Continue looking for the last node
+		deleteEndSub(p->next);   // list의 마지막까지 진행
 	else
 	{
-		delete p;                // Delete node
-		p = 0;                   // Set p (link or head) to null
+		delete p;                // elemnet삭제
+		p = 0;                   // p to null
 	}
 }
 
@@ -282,7 +244,7 @@ void List<LE>::deleteEndSub(ListNode<LE> *&p)
 template < class LE >
 int List<LE>::length() const
 
-// Returns the number of elements in a list.
+// list의 길이 return
 
 {
 	return lengthSub(head);
@@ -293,111 +255,48 @@ int List<LE>::length() const
 template < class LE >
 int List<LE>::lengthSub(ListNode<LE> *p) const
 
-// Recursive partner of the length() function. Processes the sublist
-// that begins with the node pointed to by p.
 
 {
-	int result;   // Result returned
-
-	if (p == 0)
-		result = 0;                            // End of list reached
+	int result;   
+	if (p == 0) //list의 끝에 다다르기 전까지 result ++
+		result = 0;                           
 	else
-		result = (lengthSub(p->next) + 1);   // Number of nodes after
-											 // this one + 1
+		result = (lengthSub(p->next) + 1);  
 	return result;
 }
 
-//--------------------------------------------------------------------
-//
-// "Unknown" operations used in the Bridge Exercise
-//
-//--------------------------------------------------------------------
 
-template < class LE >
-void List<LE>::unknown1() const
 
-// Unknown function 1.
-
-{
-	unknown1Sub(head);
-	cout << endl;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-template < class LE >
-void List<LE>::unknown1Sub(ListNode<LE> *p) const
-
-// Recursive partner of the unknown1() function.
-
-{
-	if (p != 0)
-	{
-		cout << p->element;
-		if (p->next != 0)
-		{
-			unknown1Sub(p->next->next);
-			cout << p->next->element;
-		}
-	}
-}
-
-//--------------------------------------------------------------------
-
-template < class LE >
-void List<LE>::unknown2()
-
-// Unknown function 2.
-
-{
-	unknown2Sub(head);
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-template < class LE >
-void List<LE>::unknown2Sub(ListNode<LE> *&p)
-
-// Recursive partner of the unknown2() function.
-
-{
-	ListNode<LE> *q;
-
-	if (p != 0 && p->next != 0)
-	{
-		q = p;
-		p = p->next;
-		q->next = p->next;
-		p->next = q;
-		unknown2Sub(q->next);
-	}
-}
 template <class LE>
 void List<LE>::iterReverse()
+//list를 reverse
 {
-	int length = this->length();
+	int length = this->length();//list의 길이를 나타내는 변수
 
-	LE *array = new LE[length];
+	LE *array = new LE[length];//list의 길이와 같은 크기의 배열 array와 reverse선언
 	LE *reverse = new LE[length];
 	ListNode<LE> *p;
 
 	p = head;
-	for (int i = 0; i < length; i++)
+	for (int i = 0; i < length; i++)//array에 list저장
 	{
 		array[i] = p->element;
 		p = p->next;
 	}
-	for (int i = 0; i < length; i++)
+	for (int i = 0; i < length; i++)//reverse에 list 를 reverse해서 저장
 	{
 		reverse[i] = array[length - i - 1];
 	}
 
 	p = head;
-	for (int i = 0; i < length; i++)
+	for (int i = 0; i < length; i++)//list에 reverse를 차례대로 저장
 	{
 		p->element = reverse[i];
 		p = p->next;
 	}
+
+	delete[] array;
+	delete[] reverse;
 
 }
 
@@ -414,15 +313,15 @@ void List<LE>::stackWriteMirror() const
 	
 	while (p != 0)
 	{
-		stack.push(p->element);
-		cout << p->element;
+		stack.push(p->element);//list의 element를 stack 에 pusch
+		cout << p->element;//element출력
 		p = p->next;
 	}
 
 	
 	while (stack.empty()!=1)
 	{
-		cout << stack.pop();
+		cout << stack.pop();//stack의 element를 pop
 	}
 	cout << endl;
 }

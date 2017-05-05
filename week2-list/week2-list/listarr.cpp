@@ -76,7 +76,7 @@ void List::remove() throw (logic_error)
 	}
 	else
 	{
-		cursor++;
+		cursor--;
 		size--;
 	}
 
@@ -114,6 +114,7 @@ void List::clear()
 		dataItems[i] = NULL;
 	}
 	cursor = -1;
+	size = 0;
 }
 
 //--------------------------------------------------------------------
