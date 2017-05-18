@@ -17,21 +17,51 @@ Heap<HE>::~Heap()
 	delete[] element;
 }
 template < class HE >
-void Heap<HE>::reheapDown(int hole)
+void Heap<HE>::reheapDown()
 {
-	int child;
-	int tmp = element[hole].pty();
+	//int child;
+	//int tmp = element[hole].pty();
 
-	for (; hole * 2 <= size; hole = child) {
-		child = hole * 2;
-		if (child != size && element[child + 1].pty() <element[child].pty())
-			child++;
-		if (element[child].pty() < tmp)
-			element[hole] = element[child];
+	//for (; hole * 2 <= size; hole = child) {
+	//	child = hole * 2;
+	//	if (child != size && element[child + 1].pty() <element[child].pty())
+	//		child++;
+	//	if (element[child].pty() < tmp)
+	//		element[hole] = element[child];
+	//	else
+	//		break;
+	//}//end for
+	//element[hole].setPty(tmp);
+	reheapDownsub(0, size-1);
+}
+
+template <class HE>
+void Heap<HE>::reheapDownsub(int root, int  bottom)
+{
+	int maxChild, rightChild, leftChild,temp = 0;
+
+	leftChild = 2 * root + 1;
+	rightChild = 2 * root + 2;
+
+	if (leftChild <= bottom)
+		if(leftChild==bottom)
+	{
+		maxChild = leftChild;
+	}
 		else
-			break;
-	}//end for
-	element[hole].setPty(tmp);
+		{
+			if (element[leftChild].pty() <= element[rightChild].pty())
+				maxChild = rightChild;
+			else
+				maxChild = leftChild;
+		}
+	if (element[root].pty() < element[maxChild].pty())
+	{
+		temp = element[root].pty();
+		element[root].setPty(element[maxChild].pty());
+		element[maxChild].setPty(temp);
+		reheapDownsub(maxChild, bottom);
+	}
 }
 
 
@@ -61,22 +91,36 @@ void Heap<HE>::insert(const HE &newElement)
 			element[i].setPty(temp);
 		}
 	}
-
 }
 
 //Remove max pty element
 template < class HE >
 HE Heap<HE>::removeMax()
 {
-	if (empty()==1)
+	HE item;
+	int temp;
+	if (empty() == 1)
 		cout << "Empty, Cannot Remove!!!\n";
 	else
 	{
-		element[0].setPty(element[size].pty());
+		/*element[0].setPty(element[size].pty());
 		size--;
 		reheapDown(size);
-		return *element;
+		return *element;*/
+		item = element[0];
+		element[0].setPty(element[size-1].pty());
+		size--;
+	
+		for (int i = size; element[size].pty() > element[i/2].pty();i/2)
+		{
+			temp = element[i-1].pty();
+			element[i-1].setPty(element[i].pty());
+			element[i].setPty(temp);
+		}
+
 	}
+		
+	return item;
 	
 }
 

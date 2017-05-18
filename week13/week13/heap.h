@@ -30,7 +30,8 @@ public:
 
 	// Output the heap structure -- used in testing/debugging
 	void showStructure() const;	 
-	void reheapDown(int hole);
+	void reheapDown();
+	void reheapDownsub(int root, int bottom);
 
 private:
 
