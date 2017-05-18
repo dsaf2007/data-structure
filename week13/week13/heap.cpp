@@ -98,7 +98,7 @@ template < class HE >
 HE Heap<HE>::removeMax()
 {
 	HE item;
-	int temp;
+	int temp,maxChild,rightChild,leftChild=0;
 	if (empty() == 1)
 		cout << "Empty, Cannot Remove!!!\n";
 	else
@@ -108,20 +108,35 @@ HE Heap<HE>::removeMax()
 		reheapDown(size);
 		return *element;*/
 		item = element[0];
-		element[0].setPty(element[size-1].pty());
+		element[0].setPty(element[size - 1].pty());
 		size--;
-	
-		for (int i = size; element[size].pty() > element[i/2].pty();i/2)
+		for (int j = 0; j < size  / 2; j++)
 		{
-			temp = element[i-1].pty();
-			element[i-1].setPty(element[i].pty());
-			element[i].setPty(temp);
+			leftChild = 2 * j + 1;
+			rightChild = 2 * j + 2;
+
+			if (leftChild <= size)
+				if (leftChild == size)
+					maxChild = leftChild;
+				else
+				{
+					if (element[leftChild].pty() <= element[rightChild].pty())
+						maxChild = rightChild;
+					else
+						maxChild = leftChild;
+				}
+
+			for (int i = size; element[j].pty() < element[maxChild].pty(); i / 2)
+			{
+				temp = element[j].pty();
+				element[j].setPty(element[maxChild].pty());
+				element[j].setPty(temp);
+			}
+
 		}
 
+		return item;
 	}
-		
-	return item;
-	
 }
 
 //Clear heap
