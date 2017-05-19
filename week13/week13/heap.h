@@ -6,7 +6,7 @@
 //
 //--------------------------------------------------------------------
 
-const int defMaxHeapSize = 10;    // Default maximum heap size
+const int defMaxHeapSize = 8;    // Default maximum heap size
 
 template < class HE >
 class Heap

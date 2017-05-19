@@ -16,67 +16,22 @@ Heap<HE>::~Heap()
 {
 	delete[] element;
 }
-template < class HE >
-void Heap<HE>::reheapDown()
-{
-	//int child;
-	//int tmp = element[hole].pty();
-
-	//for (; hole * 2 <= size; hole = child) {
-	//	child = hole * 2;
-	//	if (child != size && element[child + 1].pty() <element[child].pty())
-	//		child++;
-	//	if (element[child].pty() < tmp)
-	//		element[hole] = element[child];
-	//	else
-	//		break;
-	//}//end for
-	//element[hole].setPty(tmp);
-	reheapDownsub(0, size-1);
-}
-
-template <class HE>
-void Heap<HE>::reheapDownsub(int root, int  bottom)
-{
-	int maxChild, rightChild, leftChild,temp = 0;
-
-	leftChild = 2 * root + 1;
-	rightChild = 2 * root + 2;
-
-	if (leftChild <= bottom)
-		if(leftChild==bottom)
-	{
-		maxChild = leftChild;
-	}
-		else
-		{
-			if (element[leftChild].pty() <= element[rightChild].pty())
-				maxChild = rightChild;
-			else
-				maxChild = leftChild;
-		}
-	if (element[root].pty() < element[maxChild].pty())
-	{
-		temp = element[root].pty();
-		element[root].setPty(element[maxChild].pty());
-		element[maxChild].setPty(temp);
-		reheapDownsub(maxChild, bottom);
-	}
-}
 
 
 
 
-//Insert element
+
+//newElement삽입.
+//삽입시에 가장 큰 수가 root에 오도록 한다.
 template < class HE >
 void Heap<HE>::insert(const HE &newElement)
 {
-	int temp = 0;
-	if (size == maxSize - 1)
+	int temp = 0;// swap을 위한 변수
+	if (full()==1)// heqp이 full일 경우insert불가
 	{
 		cout << "full";
 	}
-	else if (size == 0)
+	else if (size == 0) //heap size가 0일 때 root에 insert
 	{
 		element[0] = newElement;
 		size++;
@@ -84,7 +39,7 @@ void Heap<HE>::insert(const HE &newElement)
 	else
 	{
 		element[size] = newElement;
-		for (int i = size++; newElement.pty() > element[i / 2].pty(); i /= 2)
+		for (int i = size++; newElement.pty() > element[i / 2].pty(); i /= 2)//newElement가 root보다 클 경우 root와 swap.
 		{
 			temp = element[i / 2].pty();
 			element[i / 2] = newElement;
@@ -93,48 +48,37 @@ void Heap<HE>::insert(const HE &newElement)
 	}
 }
 
-//Remove max pty element
+//maxElement(root)를 제거 하고 return한다
 template < class HE >
 HE Heap<HE>::removeMax()
 {
-	HE item;
-	int temp,maxChild,rightChild,leftChild=0;
-	if (empty() == 1)
+	HE item,temp;
+//	int temp=0;
+	if (empty() == 1)// heap가 empty일 경우 작동하지 않는다.
 		cout << "Empty, Cannot Remove!!!\n";
 	else
 	{
-		/*element[0].setPty(element[size].pty());
-		size--;
-		reheapDown(size);
-		return *element;*/
-		item = element[0];
-		element[0].setPty(element[size - 1].pty());
-		size--;
-		for (int j = 0; j < size  / 2; j++)
+	
+		item = element[0];//rooot저장
+	
+		temp = element[size - 1];//rightmost child저장
+
+		bool stop = 0;//insertion point found
+		int j = 1;//array index
+		while(j<size&&!stop)
 		{
-			leftChild = 2 * j + 1;
-			rightChild = 2 * j + 2;
-
-			if (leftChild <= size)
-				if (leftChild == size)
-					maxChild = leftChild;
-				else
-				{
-					if (element[leftChild].pty() <= element[rightChild].pty())
-						maxChild = rightChild;
-					else
-						maxChild = leftChild;
-				}
-
-			for (int i = size; element[j].pty() < element[maxChild].pty(); i / 2)
+			if (j < size - 1 && element[j].pty() < element[j + 1].pty())//j의 element보다 j+1의 element가 클경우 j++
+				j++;
+			if (temp.pty() >= element[j].pty())//rigthmost child가 가장 클경우 stop==1(loop탈출)
+				stop = 1;
+			else//index를 child로 옮긴다.
 			{
-				temp = element[j].pty();
-				element[j].setPty(element[maxChild].pty());
-				element[j].setPty(temp);
+				element[(j - 1) / 2] = element[j];
+				j = 2 * j + 1;
 			}
-
 		}
-
+		element[(j - 1) / 2] = temp;
+		size--;
 		return item;
 	}
 }
@@ -143,11 +87,9 @@ HE Heap<HE>::removeMax()
 template < class HE >
 void Heap<HE>::clear()
 {
-	for (int i = 0; i < maxSize - 1; i++)
-		removeMax();
+	
+	size = 0;
 }
-
-/* Heap status operations */
 
 //Heap is empty
 template < class HE >
@@ -163,8 +105,8 @@ int Heap<HE>::empty() const
 template < class HE >
 int Heap<HE>::full() const
 {
-	if(size == defMaxHeapSize)
-	return 1;
+	if(size == defMaxHeapSize-1)
+		return 1;
 	else return 0;
 		
 }
