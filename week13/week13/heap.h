@@ -6,7 +6,7 @@
 //
 //--------------------------------------------------------------------
 
-const int defMaxHeapSize = 10;    // Default maximum heap size
+const int defMaxHeapSize = 8;    // Default maximum heap size
 
 template < class HE >
 class Heap
@@ -30,7 +30,8 @@ public:
 
 	// Output the heap structure -- used in testing/debugging
 	void showStructure() const;	 
-	void reheapDown(int hole);
+	void reheapDown();
+	void reheapDownsub(int root, int bottom);
 
 private:
 
