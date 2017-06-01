@@ -9,15 +9,17 @@ using namespace std;
 template < class LE >
 void selectionSort ( LE keyList [], int numKeys )
 
-// Selection sort routine. Sorts the first numKeys keys in keyList
-// into ascending order.
-
+//선택정렬
+//주어진 리스트 중에 최솟값을 찾는다.
+//그 값을 맨 앞에 위치한 값과 교체한다(패스(pass)).
+//맨 처음 위치를 뺀 나머지 리스트를 같은 방법으로 교체한다.
+//n^2의 time complexity를 가진다.
 {
-	LE temp;     // Temporary storage used in swapping
+	LE temp;     
 
-	int minPt,   // Index of the smallest key in the remaining entries
+	int minPt,   //최소 key의 index
 
-		j, k;    // Loop counters
+		j, k;   
 
 
 
@@ -31,9 +33,9 @@ void selectionSort ( LE keyList [], int numKeys )
 
 			if (keyList[k] < keyList[minPt])
 
-				minPt = k;
+				minPt = k;//최소값 찾기
 
-		temp = keyList[j];
+		temp = keyList[j];//맨 앞의 위치와 교체
 
 		keyList[j] = keyList[minPt];
 
@@ -48,8 +50,8 @@ void selectionSort ( LE keyList [], int numKeys )
 template < class LE >
 void quickSort ( LE keyList [], int numKeys )
 
-// Quicksort routine. Sorts the first numKeys keys in keyList into
-// ascending order.
+//퀵 정렬
+//평균적으로 nlogn,최악의 경우 n^2의 timecomplexity를 가진다.
 
 {
     quickPartition(keyList,numKeys,0,numKeys-1);
@@ -61,20 +63,20 @@ template < class LE >
 void quickPartition ( LE keyList [], int numKeys,
                       int left, int right         )
 
-// Recursive partner of the quickSort routine. Partitions the array
-// entries between left and right into two subarrays. One subarray
-// contains the keys that are less than or equal to splitValue, and
-// the other contains the keys that are greater than splitValue.
-// Recursively sorts each of these subarrays.
+//퀵정렬의 재귀함수.
+//리스트 가운데서 하나의 원소를 고른다.이렇게 고른 원소를 피벗이라고 한다.
+//피벗 앞에는 피벗보다 값이 작은 모든 원소들이 오고, 피벗 뒤에는 피벗보다 값이 큰 모든 원소들이 오도록 피벗을 기준으로 리스트를 둘로 나눈다.
+//이렇게 리스트를 둘로 나누는 것을 분할이라고 한다.분할을 마친 뒤에 피벗은 더 이상 움직이지 않는다.
+//분할된 두 개의 작은 리스트에 대해 재귀(Recursion)적으로 이 과정을 반복한다.재귀는 리스트의 크기가 0이나 1이 될 때까지 반복된다.
 
 {
-	LE pivot,   // "Mid" value to use in splitting
+	LE pivot,   // 피벗
 
-		temp;        // Temporary storage used in swapping
+		temp;        
 
-	int pivotLeft,      // Keys in [left..splitL-1] are <= splitValue
+	int pivotLeft,      //  keyList[left..splitL-1]<=pivot 
 
-		pivotRight;      // Keys in [splitR+1..right] are > splitValue
+		pivotRight;      // keyList[splitR+1..right] > pivot
 
 
 
@@ -82,9 +84,9 @@ void quickPartition ( LE keyList [], int numKeys,
 
 
 
-	pivotLeft = left;    // Start at left and move toward right
+	pivotLeft = left;    // left에서 시작해서 right로 이동
 
-	pivotRight = right;   // Start at right and move toward left
+	pivotRight = right;   //right에서 시작해서 left로 이동
 
 
 
@@ -92,11 +94,10 @@ void quickPartition ( LE keyList [], int numKeys,
 
 	{
 
-		// Go right until key >= splitValue found.
-
+		// keyList[pivotLeft]>=pivot일 때까지 right로
 		while (keyList[pivotLeft] < pivot) pivotLeft++;
 
-		// Go left until key <= splitValue found.
+		// keyList[pivotLeft]>=pivot일 때까지 left로
 
 		while (pivot < keyList[pivotRight]) pivotRight--;
 
@@ -106,9 +107,9 @@ void quickPartition ( LE keyList [], int numKeys,
 
 		{
 
-			temp = keyList[pivotLeft];   // Swap keys
+			temp = keyList[pivotLeft];   
 
-			keyList[pivotLeft] = keyList[pivotRight];   // at limits
+			keyList[pivotLeft] = keyList[pivotRight];   
 
 			keyList[pivotRight] = temp;
 
@@ -124,7 +125,7 @@ void quickPartition ( LE keyList [], int numKeys,
 
 
 
-	// Sort each subarray.
+	//각subarray 정렬
 
 
 
@@ -145,15 +146,17 @@ void unknownSort ( LE keyList [], int numKeys )
 
 // Unknown sort routine. Sorts the first numKeys keys in keyList into
 // ascending order.
-//insert sort
+//insert sort 삽입정렬
+//자료 배열의 모든 요소를 앞에서부터 차례대로 이미 정렬된 배열 부분과 비교하여, 자신의 위치를 찾아 삽입
+//최악의 경우 time complexity는 n^2이다.
 
 {
 	int i, j, temp;
 	for (i = 1; i < numKeys; i++)
 	{
 		temp = keyList[(j = i)];
-		while (--j >= 0 && temp < data[j])
-			keyList[j + 1] = keyList[j];
+		while (--j >= 0 && temp < keyList[j])//정렬된 부분까지 비교
+			keyList[j + 1] = keyList[j];//j+1과 j의 key를 swap
 		keyList[j + 1] = temp;
 
 	}
